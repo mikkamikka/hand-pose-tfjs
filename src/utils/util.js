@@ -17,6 +17,14 @@
 import * as tf from '@tensorflow/tfjs-core';
 import {TUNABLE_FLAG_VALUE_RANGE_MAP} from './params';
 
+const $debugtext = document.querySelector('#debug-text')
+
+export function log(msg) {
+  console.log(msg)
+  $debugtext.value += msg + '\r\n'
+  $debugtext.scrollTop = $debugtext.scrollHeight
+}
+
 export function isiOS() {
   return /iPhone|iPad|iPod/i.test(navigator.userAgent);
 }

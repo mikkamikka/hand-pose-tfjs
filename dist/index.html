@@ -5,6 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>hand pose tfjs test</title>
   </head>
+  <style>#player-video {
+      width: 100%;
+    }
+    .debug {
+      position: absolute;
+      bottom: 0px;
+      width: 100%;
+      height: 20%;
+    }
+    #debug-text {
+      width: 100%;
+      height: 100%;
+    }</style>
 
   <body>
     <div id="root">
@@ -13,20 +26,20 @@
         <div id="player-container" class="player-container">
           <video id="player-video" class="player-video" playsinline="" muted="" disablepictureinpicture="" webkit-playsinline=""></video>
 
-          <canvas id="threejs-canvas" class="threejs-canvas"></canvas>
+          <!-- <canvas id="threejs-canvas" class="threejs-canvas"></canvas> -->
 
         </div>
 
-        <div class="messages">
+        <!-- <div class="messages">
           <span id="message" class="message-text message-fadeInOut"></span>
-        </div>
+        </div> -->
 
         <div class="debug">
-          <div id="debug-message" class="debug-text"></div>
+          <textarea id="debug-text"></textarea>
         </div>
 
-        <div id="menu-bottom" class="menu-bottom">          
-        </div>
+        <!-- <div id="menu-bottom" class="menu-bottom">          
+        </div> -->
 
 
         
@@ -36,5 +49,5 @@
   </body>
 
   <script src="/src.a2b27638.js"></script>
-  
+
 </html>

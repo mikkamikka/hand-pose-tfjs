@@ -65,7 +65,7 @@ async function onInit() {
 
   // const gesturePredictionPromise = Prediction.init()
 
-  console.log('Initialize ar try-on app...')
+  utils.log('Initialize ar try-on app...')
 
   Promise.all([videoPromise, handPredictionPromise]).then((result) => {
     // result[0] will contain the initialized video element
@@ -126,12 +126,14 @@ function detectUserHand() {
 
         if (handData !== "none") {
           // console.log(handData)
-         
         }
 
         predictHandNonblocking()
         // Checking if hand in frame or not by getting the hand data keypoints
         if (handData[0].keypoints != undefined) {
+
+          utils.log(handData[0].keypoints[5].name + ' x: ' + handData[0].keypoints[5].x + '  y: ' + handData[0].keypoints[5].y)
+
           // UI.setStatusMessage('Hand found in frame')
           // UI.hideIconHand();
           

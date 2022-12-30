@@ -3,8 +3,8 @@ import * as tf from '@tensorflow/tfjs-core'
 // import * as core from '@tensorflow/tfjs-core'
 
 // Register WebGL backend.
-// import * as webgl from '@tensorflow/tfjs-backend-webgl'
-import '@tensorflow/tfjs-backend-webgl'
+import * as webgl from '@tensorflow/tfjs-backend-webgl'
+// import '@tensorflow/tfjs-backend-webgl'
 
 import * as tfjsWasm from '@tensorflow/tfjs-backend-wasm';
 
@@ -36,7 +36,7 @@ export const HandPrediction = {
   init: async () => {
     // load handpose model with spesific configuration
     const model = handPoseDetection.SupportedModels.MediaPipeHands
-    console.log('Loading @tensorflow-models/hand-pose-detection (mediaPipe) model...')
+    utils.log('Loading @tensorflow-models/hand-pose-detection (mediaPipe) model...')
     runtime = utils.isMobile() ? RUNTIME.tf : RUNTIME.mp
 
     await utils.setBackendAndEnvFlags(STATE.flags, 'tfjs-webgl');
@@ -53,7 +53,7 @@ export const HandPrediction = {
         solutionPath: STATE.solutionPath,
       }
       handDetector = await handPoseDetection.createDetector(model, detectorConfig)
-      console.log(`mediapipe env: gpu`)
+      utils.log(`mediapipe env: gpu`)
     }
     // Mobile config
     // For mobile IOS we will use webgl, for mobile android we probaly will use WASM.
@@ -71,13 +71,13 @@ export const HandPrediction = {
         // solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands',
       }
       handDetector = await handPoseDetection.createDetector(model, detectorConfig)
-      console.log(
+      utils.log(
         `tensorflow env: ${tf.getBackend()}, core: ${tf.version_core}, webgl-version: ${
-          "..."
+          webgl.version_core
         }`
       )
     }
-    console.log(`HandDetector ${runtime} detector loaded.`)
+    utils.log(`HandDetector ${runtime} detector loaded.`)
 
     // Make one prediction on a sample image,
     // This is to "warm up" the model so there won't be a delay before the actual predictions later
@@ -118,11 +118,7 @@ export const HandPrediction = {
 
     
 
-    if (handData && handData.length > 0) {
-      // console.log(isFlipHorizontal)
-
-      console.log(handData)
-      
+    if (handData && handData.length > 0) {   
       return handData
     } else {
       return 'none'
