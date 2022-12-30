@@ -73,7 +73,7 @@ export const HandPrediction = {
       handDetector = await handPoseDetection.createDetector(model, detectorConfig)
       utils.log(
         `tensorflow env: ${tf.getBackend()}, core: ${tf.version_core}, webgl-version: ${
-          webgl.version_core
+          webgl.version_webgl
         }`
       )
     }

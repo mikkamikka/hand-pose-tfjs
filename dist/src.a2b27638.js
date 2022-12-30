@@ -87900,7 +87900,7 @@ var HandPrediction = {
             return handPoseDetection.createDetector(model, detectorConfig);
           case 17:
             handDetector = _context.sent;
-            utils.log("tensorflow env: ".concat(tf.getBackend(), ", core: ").concat(tf.version_core, ", webgl-version: ").concat(webgl.version_core));
+            utils.log("tensorflow env: ".concat(tf.getBackend(), ", core: ").concat(tf.version_core, ", webgl-version: ").concat(webgl.version_webgl));
           case 19:
             utils.log("HandDetector ".concat(runtime, " detector loaded."));
 
