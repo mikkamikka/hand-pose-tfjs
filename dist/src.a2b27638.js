@@ -87859,7 +87859,7 @@ var HandPrediction = {
             // load handpose model with spesific configuration
             model = handPoseDetection.SupportedModels.MediaPipeHands;
             utils.log('Loading @tensorflow-models/hand-pose-detection (mediaPipe) model...');
-            runtime = utils.isMobile() ? _MlParams.RUNTIME.tf : _MlParams.RUNTIME.mp;
+            runtime = _MlParams.RUNTIME.tf;
             _context.next = 5;
             return utils.setBackendAndEnvFlags(_MlParams.STATE.flags, 'tfjs-webgl');
           case 5:
