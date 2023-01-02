@@ -37,7 +37,7 @@ export const HandPrediction = {
     // load handpose model with spesific configuration
     const model = handPoseDetection.SupportedModels.MediaPipeHands
     utils.log('Loading @tensorflow-models/hand-pose-detection (mediaPipe) model...')
-    runtime = utils.isMobile() ? RUNTIME.tf : RUNTIME.mp
+    runtime = RUNTIME.tf
 
     await utils.setBackendAndEnvFlags(STATE.flags, 'tfjs-webgl');
 
