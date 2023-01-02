@@ -88109,51 +88109,22 @@ function _initDeviceVideo() {
 function onInit() {
   return _onInit.apply(this, arguments);
 } //-----
-// ar try-on logic
-// -----------------------------------------------------------------------------
-// function waitForUser() {
-//   UI.isMobile() === true
-//     ? UI.setStatusMessage('Touch the screen to start')
-//     : UI.setStatusMessage('Press any key to start')
-//   UI.startAnimateMessage()
-//   const startTryOnAR = () => {
-//     UI.stopAnimateMessage()
-//     UI.setStatusMessage('Place your hand in the center')
-//     startDetection()
-//     //TODO: Start running the animate function here.
-//   }
-//   // wait for player to press any key
-//   UI.isMobile() === true
-//     ? document.addEventListener('touchstart', startTryOnAR, { once: true })
-//     : window.addEventListener('keypress', startTryOnAR, { once: true })
-// }
-// function startAR() {
-//   UI.stopAnimateMessage()
-//   UI.setStatusMessage('Place your hand in the center')
-//   startDetection()
-// }
 function _onInit() {
   _onInit = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
     var isMobile, config, videoPromise, handPredictionPromise;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          // UI.init()
-          // UI.setStatusMessage('Initializing - Please wait a moment')
-          // let device = deviceDetection()
-          // console.log("Device:", device)
           isMobile = utils.isMobile();
           config = _CameraConfig.default.pc;
           if (isMobile) config = _CameraConfig.default.mobile;
-          videoPromise = initDeviceVideo(config); // const predictPromise = Prediction.init(); // uncommit for hand gesture prediction
-          handPredictionPromise = _HandPrediction.HandPrediction.init(); // const gesturePredictionPromise = Prediction.init()
+          videoPromise = initDeviceVideo(config);
+          handPredictionPromise = _HandPrediction.HandPrediction.init();
           utils.log('Initialize ar try-on app...');
           Promise.all([videoPromise, handPredictionPromise]).then(function (result) {
             // result[0] will contain the initialized video element
             deviceVideo = result[0];
             deviceVideo.play();
-            // ThreeEngine.setupScene(deviceVideo)
-            // ThreeEngine.makeCylinders()
             startDetection();
           });
         case 7:
@@ -88166,10 +88137,7 @@ function _onInit() {
 }
 function startDetection() {
   return _startDetection.apply(this, arguments);
-} // export function setMirrorState(value) {
-//   UI.mirrorCameraVideo(value)
-//   isMirror = value
-// }
+}
 function _startDetection() {
   _startDetection = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
@@ -88178,7 +88146,6 @@ function _startDetection() {
           // start detecting user hand
           // required duration 150ms-20ms~ 4-5 camera frames
           detectUserHand(); // get hand data
-          // detectUserGesture(10)
         case 1:
         case "end":
           return _context3.stop();
@@ -88201,32 +88168,7 @@ function detectUserHand() {
         // Checking if hand in frame or not by getting the hand data keypoints
         if (handData[0].keypoints != undefined) {
           utils.log(handData[0].keypoints[5].name + ' x: ' + handData[0].keypoints[5].x + '  y: ' + handData[0].keypoints[5].y);
-
-          // UI.setStatusMessage('Hand found in frame')
-          // UI.hideIconHand();
-
-          // ThreeJS set model pos / rot / scale logic
-          // -----------------------------------------------------------------------------
-          // #Each finger `start` is the first dot on that finger (mcp). `end` is the second dot for that finger.
-          // Based on the mediapipe chart: https://mediapipe.dev/images/mobile/hand_landmarks.png
-
-          // ThreeEngine.updateFilter(handData[0])
-
-          // ThreeEngine.updateHandedness(handData[0].handedness)
-
-          // // ThreeEngine.setRingPosition( handData[0].keypoints3D[13], handData[0].keypoints3D[14])
-
-          // ThreeEngine.setRingPosition( fingerIds[fid].start, fingerIds[fid].end )
-
-          // ThreeEngine.setRingRotation( fingerIds[fid].start, fingerIds[fid].end )
-
-          // ThreeEngine.setRingScale(handData[0].keypoints)
-
-          // ThreeEngine.updateCylinders()
-        } else {
-          // UI.setStatusMessage('Hand not found in frame, please center it')
-          // UI.showIconHand();
-        }
+        } else {}
       });
     }, 0);
   };
