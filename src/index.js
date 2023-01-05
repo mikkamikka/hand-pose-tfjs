@@ -5,7 +5,7 @@ import * as utils from './utils/util'
 
 
 // store a reference to the device video
-let deviceVideo
+let deviceVideo, video
 const $deviceVideo = document.querySelector('#player-video')
 
 let isMirror = false;
@@ -31,18 +31,29 @@ async function initDeviceVideo(constraints) {
 
   window.track = track
 
-  return new Promise((resolve) => {
-    $deviceVideo.onloadedmetadata = () => {
+  await new Promise((resolve) => {
+    $deviceVideo.onloadedmetadata = (args) => {
 
       // $debugText.textContent = "Actual video: " + $deviceVideo.videoWidth + "  " + $deviceVideo.videoHeight;
 
       // setVideoDimensions( $deviceVideo.videoWidth, $deviceVideo.videoHeight )
 
-      $deviceVideo.onloadeddata = () => {
-        resolve($deviceVideo)
-      }
+      console.log(args)
+
+      resolve()
+
+      // $deviceVideo.onloadeddata = () => {
+      //   // resolve()
+      // }
     }
   })
+
+  
+
+  // $deviceVideo.play();
+
+  return $deviceVideo
+
 }
 
 // setup & initialization
@@ -54,18 +65,30 @@ async function onInit() {
   let config = camConfig.pc
   if (isMobile) config = camConfig.mobile
 
-  const videoPromise = initDeviceVideo(config)
-  const handPredictionPromise = HandPrediction.init()
+  video = await initDeviceVideo(config)
+
+  video.play()
+
+  video.width = video.videoWidth;
+  video.height = video.videoHeight;
+
+
+  const handPredictionPromise = await HandPrediction.init()
 
 
   utils.log('Initialize ar try-on app...')
 
-  Promise.all([videoPromise, handPredictionPromise]).then((result) => {
-    // result[0] will contain the initialized video element
-    deviceVideo = result[0]
-    deviceVideo.play()
-    startDetection()
-  })
+  // Promise.all([videoPromise, handPredictionPromise]).then((result) => {
+  //   // result[0] will contain the initialized video element
+  //   deviceVideo = result[0]
+  //   deviceVideo.play()
+  //   startDetection()
+  // })
+
+  console.log(video)
+
+  startDetection()
+
 }
 //-----
 
@@ -81,7 +104,7 @@ function detectUserHand() {
   const predictHandNonblocking = () => {
     // TODO: Run TensorFlow.js as web worker threads to not block the main thread
     setTimeout(() => {
-      HandPrediction.predictHand(deviceVideo, { isFlipHorizontal: isMirror }).then((handData) => {
+      HandPrediction.predictHand(video, { isFlipHorizontal: isMirror }).then((handData) => {
 
         if (handData !== "none") {
           // console.log(handData)

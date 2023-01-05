@@ -39,7 +39,7 @@ export const HandPrediction = {
     utils.log('Loading @tensorflow-models/hand-pose-detection (mediaPipe) model...')
     runtime = RUNTIME.tf
 
-    await utils.setBackendAndEnvFlags(STATE.flags, 'tfjs-webgl');
+    // await utils.setBackendAndEnvFlags(STATE.flags, 'tfjs-webgl');
 
     //test
     // runtime = RUNTIME.mp
@@ -62,13 +62,14 @@ export const HandPrediction = {
       detectorConfig = {
         // runtime,
         // modelType: STATE.modelConfig.lite,
-        // maxHands: STATE.maxHands,
+        maxHands: STATE.maxHands,
         // solutionPath: STATE.solutionPath,
         runtime: 'tfjs',
         // modelType: 'full',
         // maxHands: 1,
         // solutionPath: STATE.solutionPath,
         // solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands',
+        // solutionPath: '../node_modules/@mediapipe/hands'
       }
       handDetector = await handPoseDetection.createDetector(model, detectorConfig)
       utils.log(
@@ -78,6 +79,8 @@ export const HandPrediction = {
       )
     }
     utils.log(`HandDetector ${runtime} detector loaded.`)
+
+    console.log(handDetector)
 
     // Make one prediction on a sample image,
     // This is to "warm up" the model so there won't be a delay before the actual predictions later
@@ -94,27 +97,27 @@ export const HandPrediction = {
 
   predictHand: async function (sourceElement, paramsData) {
     // FPS only counts the time it takes to finish estimateHands.
-    HandPrediction.beginEstimateHandsStats()
+    // HandPrediction.beginEstimateHandsStats()
 
     let isFlipHorizontal = false;
     if (paramsData != undefined && paramsData.isFlipHorizontal != undefined) isFlipHorizontal = paramsData.isFlipHorizontal;
 
     
 
-    try {
+    // try {
       handData = await handDetector.estimateHands(sourceElement, 
-        {flipHorizontal: isFlipHorizontal}         // flipHorizontal: false, if we want the result to flip horizontaly. Defaults is set to false.
+        {flipHorizontal: false}         // flipHorizontal: false, if we want the result to flip horizontaly. Defaults is set to false.
       ) 
       
-    } catch (error) {
-      handDetector.dispose()
-      handDetector = null
-      alert(error)
-    }
+    // } catch (error) {
+    //   handDetector.dispose()
+    //   handDetector = null
+    //   alert(error)
+    // }
 
     
 
-    HandPrediction.endEstimateHandsStats()    
+    // HandPrediction.endEstimateHandsStats()    
 
     
 

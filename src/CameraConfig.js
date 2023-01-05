@@ -13,10 +13,10 @@ const config = {
         audio: false,
         video: {
             // facingMode by default made for mobile, when running on PC the facingMode automatically change to "user"
-            facingMode: "environment", 
-            height: 640,
-            width: 480,
-            frameRate: { max: 30 }
+            facingMode: "user", 
+            width: 360,
+            height: 270            
+            // frameRate: { max: 30 }
         }
     }
     

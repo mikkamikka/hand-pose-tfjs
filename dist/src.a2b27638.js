@@ -87860,11 +87860,15 @@ var HandPrediction = {
             model = handPoseDetection.SupportedModels.MediaPipeHands;
             utils.log('Loading @tensorflow-models/hand-pose-detection (mediaPipe) model...');
             runtime = _MlParams.RUNTIME.tf;
-            _context.next = 5;
-            return utils.setBackendAndEnvFlags(_MlParams.STATE.flags, 'tfjs-webgl');
-          case 5:
+
+            // await utils.setBackendAndEnvFlags(STATE.flags, 'tfjs-webgl');
+
+            //test
+            // runtime = RUNTIME.mp
+
+            // PC config
             if (!(runtime === 'mediapipe')) {
-              _context.next = 13;
+              _context.next = 11;
               break;
             }
             detectorConfig = {
@@ -87873,36 +87877,38 @@ var HandPrediction = {
               maxHands: _MlParams.STATE.maxHands,
               solutionPath: _MlParams.STATE.solutionPath
             };
-            _context.next = 9;
+            _context.next = 7;
             return handPoseDetection.createDetector(model, detectorConfig);
-          case 9:
+          case 7:
             handDetector = _context.sent;
             utils.log("mediapipe env: gpu");
-            _context.next = 19;
+            _context.next = 17;
             break;
-          case 13:
+          case 11:
             if (!(runtime === 'tfjs')) {
-              _context.next = 19;
+              _context.next = 17;
               break;
             }
             detectorConfig = {
               // runtime,
               // modelType: STATE.modelConfig.lite,
-              // maxHands: STATE.maxHands,
+              maxHands: _MlParams.STATE.maxHands,
               // solutionPath: STATE.solutionPath,
               runtime: 'tfjs'
               // modelType: 'full',
               // maxHands: 1,
               // solutionPath: STATE.solutionPath,
               // solutionPath: 'https://cdn.jsdelivr.net/npm/@mediapipe/hands',
+              // solutionPath: '../node_modules/@mediapipe/hands'
             };
-            _context.next = 17;
+            _context.next = 15;
             return handPoseDetection.createDetector(model, detectorConfig);
-          case 17:
+          case 15:
             handDetector = _context.sent;
             utils.log("tensorflow env: ".concat(tf.getBackend(), ", core: ").concat(tf.version_core, ", webgl-version: ").concat(webgl.version_webgl));
-          case 19:
+          case 17:
             utils.log("HandDetector ".concat(runtime, " detector loaded."));
+            console.log(handDetector);
 
             // Make one prediction on a sample image,
             // This is to "warm up" the model so there won't be a delay before the actual predictions later
@@ -87915,7 +87921,7 @@ var HandPrediction = {
             window.tf = tf;
 
             // statsDetector = UI.setupMLStats()
-          case 21:
+          case 20:
           case "end":
             return _context.stop();
         }
@@ -87933,39 +87939,30 @@ var HandPrediction = {
         while (1) switch (_context2.prev = _context2.next) {
           case 0:
             // FPS only counts the time it takes to finish estimateHands.
-            HandPrediction.beginEstimateHandsStats();
+            // HandPrediction.beginEstimateHandsStats()
             isFlipHorizontal = false;
             if (paramsData != undefined && paramsData.isFlipHorizontal != undefined) isFlipHorizontal = paramsData.isFlipHorizontal;
-            _context2.prev = 3;
-            _context2.next = 6;
+
+            // try {
+            _context2.next = 4;
             return handDetector.estimateHands(sourceElement, {
-              flipHorizontal: isFlipHorizontal
+              flipHorizontal: false
             } // flipHorizontal: false, if we want the result to flip horizontaly. Defaults is set to false.
             );
-          case 6:
+          case 4:
             handData = _context2.sent;
-            _context2.next = 14;
-            break;
-          case 9:
-            _context2.prev = 9;
-            _context2.t0 = _context2["catch"](3);
-            handDetector.dispose();
-            handDetector = null;
-            alert(_context2.t0);
-          case 14:
-            HandPrediction.endEstimateHandsStats();
             if (!(handData && handData.length > 0)) {
-              _context2.next = 19;
+              _context2.next = 9;
               break;
             }
             return _context2.abrupt("return", handData);
-          case 19:
+          case 9:
             return _context2.abrupt("return", 'none');
-          case 20:
+          case 10:
           case "end":
             return _context2.stop();
         }
-      }, _callee2, null, [[3, 9]]);
+      }, _callee2);
     }));
     function predictHand(_x, _x2) {
       return _predictHand.apply(this, arguments);
@@ -88014,12 +88011,10 @@ var config = {
     audio: false,
     video: {
       // facingMode by default made for mobile, when running on PC the facingMode automatically change to "user"
-      facingMode: "environment",
-      height: 640,
-      width: 480,
-      frameRate: {
-        max: 30
-      }
+      facingMode: "user",
+      width: 360,
+      height: 270
+      // frameRate: { max: 30 }
     }
   }
 };
@@ -88043,7 +88038,7 @@ function _regeneratorRuntime() { "use strict"; /*! regenerator-runtime -- Copyri
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 // store a reference to the device video
-var deviceVideo;
+var deviceVideo, video;
 var $deviceVideo = document.querySelector('#player-video');
 var isMirror = false;
 var fingerIds = [{
@@ -88087,18 +88082,24 @@ function _initDeviceVideo() {
           track = stream.getVideoTracks()[0];
           console.log("Video constraints", JSON.stringify(track.getConstraints()));
           window.track = track;
-          return _context.abrupt("return", new Promise(function (resolve) {
-            $deviceVideo.onloadedmetadata = function () {
+          _context.next = 10;
+          return new Promise(function (resolve) {
+            $deviceVideo.onloadedmetadata = function (args) {
               // $debugText.textContent = "Actual video: " + $deviceVideo.videoWidth + "  " + $deviceVideo.videoHeight;
 
               // setVideoDimensions( $deviceVideo.videoWidth, $deviceVideo.videoHeight )
 
-              $deviceVideo.onloadeddata = function () {
-                resolve($deviceVideo);
-              };
+              console.log(args);
+              resolve();
+
+              // $deviceVideo.onloadeddata = () => {
+              //   // resolve()
+              // }
             };
-          }));
-        case 9:
+          });
+        case 10:
+          return _context.abrupt("return", $deviceVideo);
+        case 11:
         case "end":
           return _context.stop();
       }
@@ -88111,23 +88112,36 @@ function onInit() {
 } //-----
 function _onInit() {
   _onInit = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
-    var isMobile, config, videoPromise, handPredictionPromise;
+    var isMobile, config, handPredictionPromise;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           isMobile = utils.isMobile();
           config = _CameraConfig.default.pc;
           if (isMobile) config = _CameraConfig.default.mobile;
-          videoPromise = initDeviceVideo(config);
-          handPredictionPromise = _HandPrediction.HandPrediction.init();
+          _context2.next = 5;
+          return initDeviceVideo(config);
+        case 5:
+          video = _context2.sent;
+          video.play();
+          video.width = video.videoWidth;
+          video.height = video.videoHeight;
+          _context2.next = 11;
+          return _HandPrediction.HandPrediction.init();
+        case 11:
+          handPredictionPromise = _context2.sent;
           utils.log('Initialize ar try-on app...');
-          Promise.all([videoPromise, handPredictionPromise]).then(function (result) {
-            // result[0] will contain the initialized video element
-            deviceVideo = result[0];
-            deviceVideo.play();
-            startDetection();
-          });
-        case 7:
+
+          // Promise.all([videoPromise, handPredictionPromise]).then((result) => {
+          //   // result[0] will contain the initialized video element
+          //   deviceVideo = result[0]
+          //   deviceVideo.play()
+          //   startDetection()
+          // })
+
+          console.log(video);
+          startDetection();
+        case 15:
         case "end":
           return _context2.stop();
       }
@@ -88158,7 +88172,7 @@ function detectUserHand() {
   var predictHandNonblocking = function predictHandNonblocking() {
     // TODO: Run TensorFlow.js as web worker threads to not block the main thread
     setTimeout(function () {
-      _HandPrediction.HandPrediction.predictHand(deviceVideo, {
+      _HandPrediction.HandPrediction.predictHand(video, {
         isFlipHorizontal: isMirror
       }).then(function (handData) {
         if (handData !== "none") {
